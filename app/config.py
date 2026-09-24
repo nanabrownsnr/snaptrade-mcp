@@ -57,6 +57,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT","development") # development | staging | production
     API_V1_STR: str = "/api/v1"
     ALLOWED_ORIGINS: str = "*"
+    PUBLIC_URL: str = "http://localhost:8000"
     RELEASE_ID: str = "1.0.0"
     PERSONA_ID_HEADER: str = "Persona-Id"
 

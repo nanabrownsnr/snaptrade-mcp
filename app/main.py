@@ -7,15 +7,16 @@ from fastmcp import FastMCP
 from fastmcp.server.dependencies import get_access_token
 from fastmcp.server.middleware import Middleware as MCPMiddleware
 from fastmcp.server.middleware import MiddlewareContext
-from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 
 from app.auth import get_auth_provider
 from app.config import settings
 from app.extended_tools import register_extended_tools
 from app.license import license_watcher
 from app.snaptrade import cash, holdings
-from app.storage import get_connection, initialize, save_connection
+from app.storage import initialize
+from app.twynity import register_routes
 from app.usage import save_usage_report
 
 
@@ -69,37 +70,11 @@ class UsageTrackingMiddleware(MCPMiddleware):
 
 
 mcp.add_middleware(UsageTrackingMiddleware())
+register_routes(mcp)
 register_extended_tools(mcp, owner_id)
 
 
-@mcp.custom_route(f"{settings.API_V1_STR}/schema", methods=["GET"])
-async def schema(request: Request) -> JSONResponse:
-    return JSONResponse({"name": "snaptrade_connections", "endpoint": f"{settings.API_V1_STR}/snaptrade_connections", "method": "POST", "schema": {"client_id": "string", "consumer_key": "string"}})
 
 
-@mcp.custom_route(f"{settings.API_V1_STR}/snaptrade_connections", methods=["POST"])
-async def configure(request: Request) -> JSONResponse:
-    user = owner_id()
-    payload = await request.json()
-    if not payload.get("client_id") or not payload.get("consumer_key"):
-        return JSONResponse({"detail": "client_id and consumer_key are required"}, status_code=422)
-    save_connection(user, payload["client_id"], payload["consumer_key"])
-    return JSONResponse({"configured": True})
-
-
-@mcp.custom_route(f"{settings.API_V1_STR}/external-connection/me", methods=["GET"])
-async def connection_status(request: Request) -> JSONResponse:
-    return JSONResponse({"connected": get_connection(owner_id()) is not None})
-
-
-@mcp.custom_route(f"{settings.API_V1_STR}/.well-known/mcp.json", methods=["GET"])
-async def manifest(request: Request) -> JSONResponse:
-    return JSONResponse({"name": settings.APP_TITLE, "base_url": str(request.base_url).rstrip("/") + "/mcp", "version": settings.APP_VERSION, "external_connections": {"project": {"name": "snaptrade_connections"}, "api_key": None, "oauth": None}})
-
-
-@mcp.custom_route(f"{settings.API_V1_STR}/health", methods=["GET"])
-async def health(request: Request) -> JSONResponse:
-    return JSONResponse({"status": "ok", "service": settings.SERVICE_ID})
-
-
-app = mcp.http_app()
+origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()] or ["*"]
+app = mcp.http_app(middleware=[Middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST", "DELETE", "OPTIONS"], allow_headers=["mcp-protocol-version", "mcp-session-id", "Authorization", "Content-Type"], expose_headers=["mcp-session-id"])], transport="streamable-http", stateless_http=True, json_response=True)
