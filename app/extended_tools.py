@@ -21,7 +21,7 @@ def register_extended_tools(mcp, owner_id):
     def get_activities(account_id: str) -> dict:
         """Return dividends, fees, deposits, and transactions."""
         c,_=_client(owner_id())
-        return {"account_id":account_id,"activities":_body(c.transactions_and_reporting.get_activities(accounts=account_id))}
+        return {"account_id":account_id,"activities":_body(c.account_information.get_account_activities(account_id=account_id))}
     @mcp.tool
     def get_portfolio_summary() -> dict:
         """Return accounts, balances, and positions together."""
