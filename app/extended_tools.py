@@ -1,5 +1,9 @@
 """Additional read-only SnapTrade tools."""
 
+from typing import Annotated
+
+from pydantic import Field
+
 from app.snaptrade import _body, _client
 
 
@@ -12,7 +16,14 @@ def register_extended_tools(mcp, owner_id):
         return {"accounts": data, "count": len(data)}
 
     @mcp.tool
-    def get_orders(account_id: str, status: str = "all") -> dict:
+    def get_orders(
+        account_id: Annotated[
+            str, Field(description="SnapTrade account ID returned by list_accounts.")
+        ],
+        status: Annotated[
+            str, Field(description="Order status filter: all, open, executed, or cancelled.")
+        ] = "all",
+    ) -> dict:
         """Return read-only order history. Example: get_orders("account-id")."""
         c, _ = _client(owner_id())
         args = {"account_id": account_id}
@@ -24,7 +35,11 @@ def register_extended_tools(mcp, owner_id):
         }
 
     @mcp.tool
-    def get_activities(account_id: str) -> dict:
+    def get_activities(
+        account_id: Annotated[
+            str, Field(description="SnapTrade account ID returned by list_accounts.")
+        ],
+    ) -> dict:
         """Return dividends, fees, deposits, and transactions."""
         c, _ = _client(owner_id())
         return {
@@ -55,7 +70,11 @@ def register_extended_tools(mcp, owner_id):
         return {"portfolio": out, "account_count": len(out)}
 
     @mcp.tool
-    def search_symbols(query: str) -> dict:
+    def search_symbols(
+        query: Annotated[
+            str, Field(min_length=1, description="Ticker or company-name search text.")
+        ],
+    ) -> dict:
         """Search securities by ticker or name. Example: search_symbols("Apple")."""
         c, _ = _client(owner_id())
         return {
