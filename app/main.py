@@ -12,14 +12,16 @@ from starlette.responses import JSONResponse
 
 from app.auth import get_auth_provider
 from app.config import settings
+from app.extended_tools import register_extended_tools
 from app.license import license_watcher
 from app.snaptrade import cash, holdings
-from app.storage import get_connection, save_connection
+from app.storage import get_connection, initialize, save_connection
 from app.usage import save_usage_report
 
 
 @asynccontextmanager
 async def lifespan(server):
+    initialize()
     task = asyncio.create_task(license_watcher())
     try:
         yield
@@ -67,6 +69,7 @@ class UsageTrackingMiddleware(MCPMiddleware):
 
 
 mcp.add_middleware(UsageTrackingMiddleware())
+register_extended_tools(mcp, owner_id)
 
 
 @mcp.custom_route(f"{settings.API_V1_STR}/schema", methods=["GET"])
