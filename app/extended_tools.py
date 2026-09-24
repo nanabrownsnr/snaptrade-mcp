@@ -29,7 +29,7 @@ def register_extended_tools(mcp, owner_id):
         out=[]
         for a in (_body(c.account_information.list_user_accounts()) or []):
             aid=a.get("id") or a.get("brokerage_account_id")
-            out.append({"account":a,"balances":_body(c.account_information.get_user_account_balance(account_id=aid)),"positions":_body(c.account_information.get_user_account_positions(account_id=aid))})
+            out.append({"account":a,"balances":_body(c.account_information.get_user_account_balance(account_id=aid)),"positions":_body(c.account_information.get_all_account_positions(account_id=aid))})
         return {"portfolio":out,"account_count":len(out)}
     @mcp.tool
     def search_symbols(query: str) -> dict:

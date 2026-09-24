@@ -24,7 +24,7 @@ def holdings(owner_id: str) -> dict:
     normalized = []
     for account in accounts or []:
         account_id = account.get("id") or account.get("brokerage_account_id")
-        positions = _body(client.account_information.get_user_account_positions(account_id=account_id))
+        positions = _body(client.account_information.get_all_account_positions(account_id=account_id))
         for position in positions or []:
             symbol = position.get("symbol", {})
             normalized.append({
