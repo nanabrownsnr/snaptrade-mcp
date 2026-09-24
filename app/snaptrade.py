@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from snaptrade_client import SnapTrade
+from snaptrade_client import SnapTrade, SnapTradeAuth
 
 from app.storage import get_connection
 
@@ -11,7 +11,7 @@ def _client(owner_id: str) -> tuple[SnapTrade, dict[str, str]]:
     connection = get_connection(owner_id)
     if connection is None:
         raise ValueError("SnapTrade is not configured for this user")
-    return SnapTrade(consumer_key=connection["consumer_key"], client_id=connection["client_id"]), connection
+    return SnapTrade(auth=SnapTradeAuth.personal_api_key(consumer_key=connection["consumer_key"], client_id=connection["client_id"])), connection
 
 
 def _body(response: Any) -> Any:

@@ -2016,7 +2016,7 @@ requires-dist = [
     { name = "pydantic-settings", specifier = "==2.14.2" },
     { name = "python-dotenv", specifier = "==1.2.2" },
     { name = "python-jose", extras = ["cryptography"], specifier = "==3.5.0" },
-    { name = "snaptrade-python-sdk", specifier = ">=11.0.0,<12" },
+    { name = "snaptrade-python-sdk", specifier = ">=13.0.26,<14" },
     { name = "uvicorn", specifier = "==0.51.0" },
 ]
 
@@ -2029,7 +2029,7 @@ dev = [
 
 [[package]]
 name = "snaptrade-python-sdk"
-version = "11.0.213"
+version = "13.0.26"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -2040,9 +2040,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/38/eb/559628faf4532f71ddb0f2e26bedf48bdde45b6c800f3293783c284c91bd/snaptrade_python_sdk-11.0.213.tar.gz", hash = "sha256:033fae36fee99b3617ee613a79026a47b882efb2a374ad800f1138359f5369b1", size = 326526, upload-time = "2026-07-21T11:58:44.098Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/81/25/053fc2f5529d083f2a76e0125418820bbfb23602d4438aab7f92a0a6b861/snaptrade_python_sdk-13.0.26.tar.gz", hash = "sha256:2220febaf5b71502780e0f5e9290e7058318d9cd5cef83e433e4ca2e813b3783", size = 478843, upload-time = "2026-09-23T18:37:13.339Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/c0/8217f7373a2323837c768ecabcc74edc098108f817e50b5a5a847c813cac/snaptrade_python_sdk-11.0.213-py3-none-any.whl", hash = "sha256:307c0ad72e5bec77ca4181c52c6b8e2435aa856f5b77bc40b28c3ed5177844bb", size = 1271692, upload-time = "2026-07-21T11:58:42.596Z" },
+    { url = "https://files.pythonhosted.org/packages/f6/d0/d0383eb4cbbb096d6746ebff5d6a986ed934c3d91fff12d529790f397062/snaptrade_python_sdk-13.0.26-py3-none-any.whl", hash = "sha256:be727e26b77c7e8c939223b7a432929cda1e7ae143193f94006ef944e2cf2f35", size = 2172528, upload-time = "2026-09-23T18:37:10.686Z" },
 ]
 
 [[package]]

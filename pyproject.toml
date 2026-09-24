@@ -5,7 +5,7 @@ description = "Read-only brokerage holdings MCP powered by SnapTrade"
 requires-python = ">=3.11"
 dependencies = [
     "fastmcp==3.4.5",
-    "snaptrade-python-sdk>=11.0.0,<12",
+    "snaptrade-python-sdk>=13.0.26,<14",
     "cryptography>=43,<50",
     "psycopg[binary]>=3.2,<4",
     "httpx==0.28.1",
