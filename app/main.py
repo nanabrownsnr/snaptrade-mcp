@@ -74,7 +74,20 @@ register_routes(mcp)
 register_extended_tools(mcp, owner_id)
 
 
-
-
-origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()] or ["*"]
-app = mcp.http_app(middleware=[Middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"], expose_headers=["mcp-session-id"])], transport="streamable-http", stateless_http=True, json_response=True)
+origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()] or [
+    "*"
+]
+app = mcp.http_app(
+    middleware=[
+        Middleware(
+            CORSMiddleware,
+            allow_origins=origins,
+            allow_methods=["*"],
+            allow_headers=["*"],
+            expose_headers=["mcp-session-id"],
+        )
+    ],
+    transport="streamable-http",
+    stateless_http=True,
+    json_response=True,
+)
